@@ -116,7 +116,7 @@ class RPCSESSION(object):
     def rpc_send(self, source, vid, media_name, media_id, video_title, play_count, video_duration, share_url,
                  video_cover, video_width, video_height, source_type, praise_count, fav_count, share_count,
                  comment_count, create_time, video_url, channel_id, topic, question_type, meta_data, parse_type):
-        time.sleep(1)  # 控制并发下的最大链接数
+        time.sleep(0.1)  # 控制并发下的最大链接数
         self.s.post(url='http://116.31.122.113:8101/budao.SpiderInputService/InputVideoData',
                     data=RPCDATA.serialize(source=source
                                            , vid=vid

@@ -87,7 +87,7 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                 AuthorApiDouyinSpider.try_count += 1
                 if AuthorApiDouyinSpider.try_count > 10:
                     from datetime import datetime
-                    with open('search_err.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
+                    with open(str(datetime.now().date().strftime('%Y%m%d'))+'search_err.txt', 'a',
                               encoding='utf-8')as file:
                         file.write(
                             'keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
@@ -100,7 +100,7 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                         meta=response.meta, callback=self.parse)
         else:
             from datetime import datetime
-            with open('douyin_parse_!200_err.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
+            with open(str(datetime.now().date().strftime('%Y%m%d'))+'douyin_parse_!200_err.txt', 'a',
                       encoding='utf-8')as file:
                 file.write('keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
 
@@ -130,7 +130,7 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                         else:
                             item['play_count'] = 0
                         if 'video' in i.keys() and 'duration' in i['video'].keys() and i['video']['duration']:
-                            item['video_duration'] = round(i['video']['duration'] / 1000)
+                            item['video_duration'] = round((i['video']['duration']) / 1000)
                         else:
                             item['video_duration'] = 0
                         if 'share_url' in i.keys() and i['share_url']:
@@ -180,6 +180,6 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                         yield item
         else:
             from datetime import datetime
-            with open('douyin_detail_!200_err.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
+            with open(str(datetime.now().date().strftime('%Y%m%d')) + '_douyin_detail_!200_err.txt', 'a',
                       encoding='utf-8')as file:
                 file.write('keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')

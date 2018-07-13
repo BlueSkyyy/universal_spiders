@@ -22,7 +22,7 @@ class UniversalSpidersPipeline(object):
         self.client.session_close()
 
     def process_item(self, item, spider):
-        time.sleep(1)
+        time.sleep(0.1)
         self.client.rpc_send(source=item['source'], vid=item['vid'], media_name=item['media_name'],
                              media_id=item['media_id'], video_title=item['video_title'], play_count=item['play_count'],
                              video_duration=item['video_duration'], share_url=item['share_url'], source_type='',
@@ -38,8 +38,9 @@ class UniversalSpidersPipeline(object):
 
 class WriteAwemIdToFile(object):
     def process_item(self, item, spider):
-        with open('awemeid.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a', encoding='utf-8')as file:
+        with open(str(datetime.now().date().strftime('%Y%m%d')) + '_awemeid.txt', 'a', encoding='utf-8')as file:
             file.write(item['vid'] + '\n')
+        return item
 
 
 if __name__ == "__main__":

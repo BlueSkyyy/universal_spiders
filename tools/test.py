@@ -202,20 +202,21 @@ if __name__ == '__main__':
                  {"iid": 1, "device_id": 1}]
 
     params = {
-        # "max_cursor": 0,
-        'keyword': '58915999',
+        #"max_cursor": '1531050225000',
+        'user_id': '60205035925',
         "device_platform": "android",
-        "iid": 37526064403,
+        "count": 1000,
+        "iid": 35747076934,
         "version_code": "166",
         "app_name": "aweme",
         "version_name": "1.6.6",
-        "device_id": 37977281220,
+        "device_id": 51277347406,
         "ac": "wifi",
         "aid": 1128,
         "build_number": 16605
     }
     a = DouyinSigHelper.rewrite_params(params, round(time.time()), round(time.time() * 1000))
-    url = "https://aweme.snssdk.com/aweme/v1/general/search/?" + parse.urlencode(a)
+    url = "https://api.amemv.com/aweme/v1/aweme/post/?" + parse.urlencode(a)
     print(url)
     import requests
 
@@ -237,7 +238,19 @@ if __name__ == '__main__':
     s = requests.session()
     b = s.get(url=url, headers=search_header)
     print(b.text)
+    print(round(time.time() * 1000))
     # import random
     # a = [1, 2, 3]
     # print(len(a))
     # print(random.randint(0, len(a)))
+    import json
+
+    data = json.loads(b.text, encoding='utf-8')
+    if 'status_code' in data.keys() and data['status_code'] == 0:
+        if 'aweme_list' in data.keys() and data['aweme_list']:
+            print('*' * 99 + str(len(data['aweme_list'])))
+            for i in data['aweme_list']:
+                if 'aweme_id' in i.keys() and i['aweme_id']:
+                    print(i['aweme_id'])
+                else:
+                    print('failed')
