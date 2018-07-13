@@ -1,0 +1,5 @@
+.idea
+universal_spiders/spiders/__pycache__/
+universal_spiders/__pycache__/
+tools/__pycache__/
+pb/__pycache__/
