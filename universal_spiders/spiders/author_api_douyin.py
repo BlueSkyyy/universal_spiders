@@ -31,21 +31,21 @@ class AuthorApiDouyinSpider(scrapy.Spider):
         # 获取用户信息
         user_dict = {
             "抖音好看的美腿在这里": ['952454822'],
-            # "抖音里的帅boy": ['58915999', '11111111ii', '58826496', '19008461'],
-            # "抖音最美小姐姐": ['IAMCHEESE', '6065536', 'yingtaogongzhu', '9503043', 'babeyuu55'],
-            # "抖音潮流搭配风": ['839399539', 'juzi90312', '124885918', '14808960'],
-            # "抖音文化小课堂/抖音让你成为文化人": ['987523062', '1072132481', '98337230', '837222249'],
-            # "抖音美食炼成术": ['781340612', '633041794', '698550156', '333025213', '576657769'],
-            # "抖音里的小姐姐好会穿": ['cutie888', 'yanshitou1234'],
-            # "抖音精致达人会生活": ['291954110', 'mz36', 'shenghuo66'],
-            # "抖音恋爱tip教学": ['291931910', '7664071', '37881979', '7146328', 'xy9920599'],
-            # "抖音Ps信手拈来": ['cui2066', 'ymawxb', '867048418', '867048418', 'ps8294'],
-            # "抖音Excel教学不求人": ['154539259', 'lime0906.', 'dnkt6666', 'excel001', 'excel3'],
-            # "抖音让你PPT略胜一筹": ['606186051', '346715476', '950779070', 'pptmoban', '991443274'],
-            # "抖音上的戏精有很多": ['63452991', '14286898', '3518813'],
-            # "抖音里的烘焙工厂": ['qiyue52718', '169558553', '99494425', '385699400', '21618813'],
-            # "抖音表白套路汇总": ['a7529235'],
-            # "抖音计算器音乐大全": ['139759957', '130754538', '849693895', '95069902']
+            "抖音里的帅boy": ['58915999', '11111111ii', '58826496', '19008461'],
+            "抖音最美小姐姐": ['IAMCHEESE', '6065536', 'yingtaogongzhu', '9503043', 'babeyuu55'],
+            "抖音潮流搭配风": ['839399539', 'juzi90312', '124885918', '14808960'],
+            "抖音文化小课堂/抖音让你成为文化人": ['987523062', '1072132481', '98337230', '837222249'],
+            "抖音美食炼成术": ['781340612', '633041794', '698550156', '333025213', '576657769'],
+            "抖音里的小姐姐好会穿": ['cutie888', 'yanshitou1234'],
+            "抖音精致达人会生活": ['291954110', 'mz36', 'shenghuo66'],
+            "抖音恋爱tip教学": ['291931910', '7664071', '37881979', '7146328', 'xy9920599'],
+            "抖音Ps信手拈来": ['cui2066', 'ymawxb', '867048418', '867048418', 'ps8294'],
+            "抖音Excel教学不求人": ['154539259', 'lime0906.', 'dnkt6666', 'excel001', 'excel3'],
+            "抖音让你PPT略胜一筹": ['606186051', '346715476', '950779070', 'pptmoban', '991443274'],
+            "抖音上的戏精有很多": ['63452991', '14286898', '3518813'],
+            "抖音里的烘焙工厂": ['qiyue52718', '169558553', '99494425', '385699400', '21618813'],
+            "抖音表白套路汇总": ['a7529235'],
+            "抖音计算器音乐大全": ['139759957', '130754538', '849693895', '95069902']
         }
         for k, v in user_dict.items():
             for i in v:
@@ -87,7 +87,7 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                 AuthorApiDouyinSpider.try_count += 1
                 if AuthorApiDouyinSpider.try_count > 10:
                     from datetime import datetime
-                    with open('search_err.txt' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
+                    with open('search_err.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
                               encoding='utf-8')as file:
                         file.write(
                             'keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
@@ -100,7 +100,7 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                         meta=response.meta, callback=self.parse)
         else:
             from datetime import datetime
-            with open('douyin_parse_!200_err.txt' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
+            with open('douyin_parse_!200_err.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
                       encoding='utf-8')as file:
                 file.write('keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
 
@@ -180,6 +180,6 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                         yield item
         else:
             from datetime import datetime
-            with open('douyin_detail_!200_err.txt' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
+            with open('douyin_detail_!200_err.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a',
                       encoding='utf-8')as file:
                 file.write('keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')

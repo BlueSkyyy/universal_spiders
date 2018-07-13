@@ -8,6 +8,8 @@ from tools.utils import RPCSESSION
 from scrapy import signals
 from pydispatch import dispatcher
 import time
+from datetime import datetime
+
 
 class UniversalSpidersPipeline(object):
 
@@ -32,6 +34,12 @@ class UniversalSpidersPipeline(object):
                              parse_type=item['parse_type'])
 
         return item
+
+
+class WriteAwemIdToFile(object):
+    def process_item(self, item, spider):
+        with open('awemeid.txt_' + str(datetime.now().date().strftime('%Y%m%d')), 'a', encoding='utf-8')as file:
+            file.write(item['vid'] + '\n')
 
 
 if __name__ == "__main__":
