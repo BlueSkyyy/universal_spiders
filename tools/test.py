@@ -202,10 +202,10 @@ if __name__ == '__main__':
                  {"iid": 1, "device_id": 1}]
 
     params = {
-        #"max_cursor": '1531050225000',
-        'user_id': '60205035925',
+        "max_cursor": '0',
+        'user_id': '72816605446',
         "device_platform": "android",
-        "count": 1000,
+        "count": 20,
         "iid": 35747076934,
         "version_code": "166",
         "app_name": "aweme",
@@ -236,21 +236,21 @@ if __name__ == '__main__':
     }
 
     s = requests.session()
-    b = s.get(url=url, headers=search_header)
+    b = s.get(url=url, headers=header)
     print(b.text)
     print(round(time.time() * 1000))
     # import random
     # a = [1, 2, 3]
     # print(len(a))
     # print(random.randint(0, len(a)))
-    import json
-
-    data = json.loads(b.text, encoding='utf-8')
-    if 'status_code' in data.keys() and data['status_code'] == 0:
-        if 'aweme_list' in data.keys() and data['aweme_list']:
-            print('*' * 99 + str(len(data['aweme_list'])))
-            for i in data['aweme_list']:
-                if 'aweme_id' in i.keys() and i['aweme_id']:
-                    print(i['aweme_id'])
-                else:
-                    print('failed')
+    # import json
+    #
+    # data = json.loads(b.text, encoding='utf-8')
+    # if 'status_code' in data.keys() and data['status_code'] == 0:
+    #     if 'aweme_list' in data.keys() and data['aweme_list']:
+    #         print('*' * 99 + str(len(data['aweme_list'])))
+    #         for i in data['aweme_list']:
+    #             if 'aweme_id' in i.keys() and i['aweme_id']:
+    #                 print(i['aweme_id'])
+    #             else:
+    #                 print('failed')

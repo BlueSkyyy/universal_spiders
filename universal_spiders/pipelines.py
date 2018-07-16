@@ -23,24 +23,33 @@ class UniversalSpidersPipeline(object):
 
     def process_item(self, item, spider):
         time.sleep(0.1)
-        self.client.rpc_send(source=item['source'], vid=item['vid'], media_name=item['media_name'],
-                             media_id=item['media_id'], video_title=item['video_title'], play_count=item['play_count'],
-                             video_duration=item['video_duration'], share_url=item['share_url'], source_type='',
-                             create_time=item['create_time'], channel_id='', question_type='', meta_data='',
-                             video_cover=item['video_cover'], video_width=item['video_width'],
-                             video_height=item['video_height'], praise_count=item['praise_count'],
-                             fav_count=item['fav_count'], share_count=item['share_count'],
-                             comment_count=item['comment_count'], video_url=item['video_url'], topic=item['topic'],
-                             parse_type=item['parse_type'])
+        if int(item['video_duration']) == 0 or item['video_url'] is None:
+            pass
+        else:
+            self.client.rpc_send(source=item['source'], vid=item['vid'], media_name=item['media_name'],
+                                 media_id=item['media_id'], video_title=item['video_title'],
+                                 play_count=item['play_count'],
+                                 video_duration=item['video_duration'], share_url=item['share_url'], source_type='',
+                                 create_time=item['create_time'], channel_id='', question_type='', meta_data='',
+                                 video_cover=item['video_cover'], video_width=item['video_width'],
+                                 video_height=item['video_height'], praise_count=item['praise_count'],
+                                 fav_count=item['fav_count'], share_count=item['share_count'],
+                                 comment_count=item['comment_count'], video_url=item['video_url'], topic=item['topic'],
+                                 parse_type=item['parse_type'])
 
-        return item
+            return item
 
 
 class WriteAwemIdToFile(object):
     def process_item(self, item, spider):
-        with open(str(datetime.now().date().strftime('%Y%m%d')) + '_awemeid.txt', 'a', encoding='utf-8')as file:
-            file.write(item['vid'] + '\n')
-        return item
+        if int(item['video_duration']) == 0 or item['video_url'] is None:
+            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'miss_duration_or_url_awemeid.txt', 'a', encoding='utf-8')as file:
+                file.write(item['vid'] + '\n')
+            return item
+        else:
+            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'succeed_awemeid.txt', 'a', encoding='utf-8')as file:
+                file.write(item['vid'] + '\n')
+            return item
 
 
 if __name__ == "__main__":

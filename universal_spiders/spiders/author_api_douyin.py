@@ -52,32 +52,30 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                 meta_dict = {"topic": k, "keyword": i}
                 yield scrapy.Request(
                     url='https://aweme.snssdk.com/aweme/v1/general/search/?' + DouyinUserAndParamsHelper.update_params(
-                        {"keyword": i}), dont_filter=True, headers=AuthorApiDouyinSpider.search_header, method='GET',
+                        {"keyword": i, "count": 10}), dont_filter=True, headers=AuthorApiDouyinSpider.search_header,
+                    method='GET',
                     meta=meta_dict, callback=self.parse)
 
     def parse(self, response):
-        aweme_count = 0
         nickname = ''
         uid = ''
         if response.status == 200:
             data = json.loads(str(response.body, encoding='utf-8'))
             if 'status_code' in data.keys() and data['status_code'] == 0:
-                print(str(response.body, encoding='utf-8'))
+                # print(str(response.body, encoding='utf-8'))
                 if 'user_list' in data.keys() and data['user_list']:
                     u = data['user_list'][0]
                     if 'user_info' in u.keys() and u['user_info']:
-                        if 'aweme_count' in u['user_info'].keys() and u['user_info']['aweme_count']:
-                            aweme_count = u['user_info']['aweme_count']
                         if 'nickname' in u['user_info'].keys() and u['user_info']['nickname']:
                             nickname = u['user_info']['nickname']
                         else:
                             nickname = 'unknown'
                         if 'uid' in u['user_info'].keys() and u['user_info']['uid']:
                             uid = u['user_info']['uid']
-                            response.meta.update({"user_id": uid, "nickname": nickname, "aweme_count": aweme_count})
+                            response.meta.update({"user_id": uid, "nickname": nickname})
                             yield scrapy.Request(
                                 url='https://api.amemv.com/aweme/v1/aweme/post/?' + DouyinUserAndParamsHelper.update_params(
-                                    {"user_id": uid, "count": aweme_count}),
+                                    {"max_cursor": "0", "user_id": uid, "count": 20}),
                                 dont_filter=True, headers=AuthorApiDouyinSpider.default_header, method='GET',
                                 meta=response.meta,
                                 callback=self.detail_parse)
@@ -87,20 +85,20 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                 AuthorApiDouyinSpider.try_count += 1
                 if AuthorApiDouyinSpider.try_count > 10:
                     from datetime import datetime
-                    with open(str(datetime.now().date().strftime('%Y%m%d'))+'search_err.txt', 'a',
+                    with open(str(datetime.now().date().strftime('%Y%m%d')) + 'search_err.txt', 'a',
                               encoding='utf-8')as file:
                         file.write(
                             'keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
                 else:
                     yield scrapy.Request(
                         url='https://aweme.snssdk.com/aweme/v1/general/search/?' + DouyinUserAndParamsHelper.update_params(
-                            {"keyword": response.meta['keyword']}), dont_filter=True,
+                            {"keyword": response.meta['keyword'], "count": 10}), dont_filter=True,
                         headers=AuthorApiDouyinSpider.search_header,
                         method='GET',
                         meta=response.meta, callback=self.parse)
         else:
             from datetime import datetime
-            with open(str(datetime.now().date().strftime('%Y%m%d'))+'douyin_parse_!200_err.txt', 'a',
+            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'douyin_parse_!200_err.txt', 'a',
                       encoding='utf-8')as file:
                 file.write('keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
 
@@ -178,8 +176,19 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                         item['topic'] = response.meta['topic']
                         item['parse_type'] = 1
                         yield item
+                if 'has_more' in data.keys() and int(data['has_more']) == 1 and 'max_cursor' in data.keys() and data[
+                    'max_cursor']:
+                    print('HAS_MORE_VIDEO')
+                    yield scrapy.Request(
+                        url='https://api.amemv.com/aweme/v1/aweme/post/?' + DouyinUserAndParamsHelper.update_params(
+                            {"max_cursor": data['max_cursor'], "user_id": response.meta['user_id'], "count": 10}),
+                        dont_filter=True, headers=AuthorApiDouyinSpider.default_header, method='GET',
+                        meta=response.meta,
+                        callback=self.detail_parse)
         else:
             from datetime import datetime
             with open(str(datetime.now().date().strftime('%Y%m%d')) + '_douyin_detail_!200_err.txt', 'a',
                       encoding='utf-8')as file:
-                file.write('keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
+                file.write(
+                    'keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + ",user_id:" +
+                    response.meta['user_id'] + '\n')
