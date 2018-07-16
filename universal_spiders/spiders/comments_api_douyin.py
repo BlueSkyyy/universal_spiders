@@ -37,10 +37,10 @@ class CommentsApiDouyinSpider(scrapy.Spider):
         query_data = self.db_client.cursor.fetchall()
         # query_data = ['6569926925316263176']
         for i in query_data:
-            meta_dict = {"aweme_id": i}
+            meta_dict = {"aweme_id": str(i[0])}
             yield scrapy.Request(
                 url='https://aweme.snssdk.com/aweme/v1/comment/list/?' + DouyinUserAndParamsHelper.update_params({
-                    "aweme_id": i, "cursor": "0", "count": "20"
+                    "aweme_id": str(i[0]), "cursor": 0, "count": 20
                 }), dont_filter=True, method='GET', headers=CommentsApiDouyinSpider.dedault_header,
                 meta=meta_dict, callback=self.parse)
 
@@ -88,13 +88,13 @@ class CommentsApiDouyinSpider(scrapy.Spider):
                             item['create_time'] = i['create_time']
                         else:
                             item['create_time'] = round(time.time())
-                        yield item
+                        print(item)
                 if 'has_more' in data.keys() and int(data['has_more']) == 1:
                     print('HAS_MORE_COMMENTS')
                     yield scrapy.Request(
                         url='https://aweme.snssdk.com/aweme/v1/comment/list/?' + DouyinUserAndParamsHelper.update_params(
                             {
-                                "aweme_id": response.meta["aweme_id"], "cursor": data["cursor"], "count": "20"
+                                "aweme_id": response.meta["aweme_id"], "cursor": int(data["cursor"]), "count": 20
                             }), dont_filter=True, method='GET', headers=CommentsApiDouyinSpider.dedault_header,
                         meta=response.meta, callback=self.parse)
         else:
