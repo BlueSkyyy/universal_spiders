@@ -32,3 +32,16 @@ class UniversalSpidersItem(scrapy.Item):
     question_type = scrapy.Field()  # 问答类型
     meta_data = scrapy.Field()  # 元数据 string
     parse_type = scrapy.Field()  # 解析规则 int
+
+
+class DouyinCommentsItem(scrapy.Item):
+    source = scrapy.Field()
+    vid = scrapy.Field()
+    cid = scrapy.Field()
+    content = scrapy.Field()
+    favor_num = scrapy.Field()
+    user_id = scrapy.Field()
+    user_name = scrapy.Field()
+    user_photo = scrapy.Field()
+    reply_num = scrapy.Field()
+    create_time = scrapy.Field()

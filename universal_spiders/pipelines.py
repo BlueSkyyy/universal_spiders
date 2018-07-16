@@ -4,7 +4,7 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-from tools.utils import RPCSESSION
+from tools.utils import RPCSESSION, DouyinCommentsRPCSession
 from scrapy import signals
 from pydispatch import dispatcher
 import time
@@ -43,18 +43,47 @@ class UniversalSpidersPipeline(object):
 class WriteAwemIdToFile(object):
     def process_item(self, item, spider):
         if int(item['video_duration']) == 0 or item['video_url'] is None:
-            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'miss_duration_or_url_awemeid.txt', 'a', encoding='utf-8')as file:
+            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'miss_duration_or_url_awemeid.txt', 'a',
+                      encoding='utf-8')as file:
                 file.write(item['vid'] + '\n')
             return item
         else:
-            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'succeed_awemeid.txt', 'a', encoding='utf-8')as file:
+            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'succeed_awemeid.txt', 'a',
+                      encoding='utf-8')as file:
                 file.write(item['vid'] + '\n')
             return item
 
 
+# *********************************************************************************************************************
+# *********************************************************************************************************************
+
+class DouyinCommentsPipline(object):
+    def __init__(self):
+        super(DouyinCommentsPipline, self)
+        self.client = DouyinCommentsRPCSession()
+        dispatcher.connect(self.client_close, signals.spider_closed)
+
+    def client_close(self):
+        self.client.douyin_com_session_close()
+
+    def process_item(self, item, spider):
+        time.sleep(0.1)
+        if item['vid'] is None or item['content'] is None or item['cid'] is None or item['user_id'] is None:
+            pass
+        else:
+            self.client.rpc_send(source=item['source'], vid=item['vid'], cid=item['cid'], content=item['content'],
+                                 favor_num=item['favor_num'], user_id=item['user_id'], user_name=item['user_name'],
+                                 user_photo=item['user_photo'], reply_num=0, is_hot=False,
+                                 create_time=item['create_time'])
+
+
 if __name__ == "__main__":
-    r = RPCSESSION()
-    r.rpc_send(source=1, vid='t', media_name='t', media_id='t', video_title='t', play_count=0, video_duration=12,
-               share_url='t', source_type='', create_time=1531372816, channel_id='', question_type='', meta_data='',
-               video_cover='t', video_width=1, video_height=1, praise_count=1, fav_count=2, share_count=3,
-               comment_count=4, video_url='t', topic='t', parse_type=1)
+    # r = RPCSESSION()
+    # r.rpc_send(source=1, vid='t', media_name='t', media_id='t', video_title='t', play_count=0, video_duration=12,
+    #            share_url='t', source_type='', create_time=1531372816, channel_id='', question_type='', meta_data='',
+    #            video_cover='t', video_width=1, video_height=1, praise_count=1, fav_count=2, share_count=3,
+    #            comment_count=4, video_url='t', topic='t', parse_type=1)
+    r = DouyinCommentsRPCSession()
+    r.rpc_send(source=1, vid='t', cid='t', content='t', favor_num=0, user_id='t', user_name='t', user_photo='t',
+               reply_num=999, is_hot=True,
+               create_time=1531725183)

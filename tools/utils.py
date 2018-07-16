@@ -22,11 +22,11 @@ class MysqlDB:
     def __init__(self):
         try:
             self.connect = pymysql.Connect(
-                host='221.228.79.244',
+                host='106.38.197.35',
                 port=8066,
-                user='jxz_db@jxz_bd',
-                password='xywaD3kfz',
-                db='budao',
+                user='spideradmin@spider',
+                password='O5w47YMLa',
+                db='spider',
                 charset='utf8mb4'
             )
             # _l.info('db-connect-success')
@@ -145,6 +145,54 @@ class RPCSESSION(object):
     def session_close(self):
         self.s.close()
         print('RPC_SESSION_CLOSED')
+
+
+class DouyinCommentsRPCData(object):
+    @staticmethod
+    def serialize(source, vid, cid, content, favor_num, user_id, user_name, user_photo, reply_num, is_hot, create_time):
+        temp_request = spiderinput_pb2.InputCommentRequest()
+        comment_data = temp_request.comment_datas.add()
+        comment_data.source = source
+        comment_data.vid = vid
+        comment_data.cid = cid
+        comment_data.content = content
+        comment_data.favor_num = favor_num
+        comment_data.user_id = user_id
+        comment_data.user_name = user_name
+        comment_data.user_photo = user_photo
+        comment_data.reply_num = reply_num
+        comment_data.is_hot = is_hot
+        comment_data.create_time = create_time
+        return temp_request.SerializeToString()
+
+
+class DouyinCommentsRPCSession(object):
+    default_header = {"Content-Type": "application/protobuf"}
+
+    def __init__(self):
+        self.s = requests.session()
+
+    def rpc_send(self, source, vid, cid, content, favor_num, user_id, user_name, user_photo, reply_num, is_hot,
+                 create_time):
+        time.sleep(0.1)
+        self.s.post(url='http://116.31.122.113:8101/budao.SpiderInputService/InputCommentData',
+                    data=DouyinCommentsRPCData.serialize(
+                        source=source,
+                        vid=vid,
+                        cid=cid,
+                        content=content,
+                        favor_num=favor_num,
+                        user_id=user_id,
+                        user_name=user_name,
+                        user_photo=user_photo,
+                        reply_num=reply_num,
+                        is_hot=is_hot,
+                        create_time=create_time
+                    ), headers=self.default_header)
+
+    def douyin_com_session_close(self):
+        self.s.close()
+        print('DOUYIN_COMSESSION_CLOSED')
 
 
 class Safe:

@@ -203,7 +203,7 @@ if __name__ == '__main__':
 
     params = {
         "max_cursor": '0',
-        'user_id': '72816605446',
+        'aweme_id': '6569926925316263176',
         "device_platform": "android",
         "count": 20,
         "iid": 35747076934,
@@ -216,7 +216,7 @@ if __name__ == '__main__':
         "build_number": 16605
     }
     a = DouyinSigHelper.rewrite_params(params, round(time.time()), round(time.time() * 1000))
-    url = "https://api.amemv.com/aweme/v1/aweme/post/?" + parse.urlencode(a)
+    url = "https://aweme.snssdk.com/aweme/v1/comment/list/?" + parse.urlencode(a)
     print(url)
     import requests
 
@@ -236,9 +236,8 @@ if __name__ == '__main__':
     }
 
     s = requests.session()
-    b = s.get(url=url, headers=header)
+    b = s.get(url=url, headers=search_header)
     print(b.text)
-    print(round(time.time() * 1000))
     # import random
     # a = [1, 2, 3]
     # print(len(a))
