@@ -88,7 +88,7 @@ class CommentsApiDouyinSpider(scrapy.Spider):
                             item['create_time'] = i['create_time']
                         else:
                             item['create_time'] = round(time.time())
-                        print(item)
+                        yield item
                 if 'has_more' in data.keys() and int(data['has_more']) == 1:
                     print('HAS_MORE_COMMENTS')
                     yield scrapy.Request(
