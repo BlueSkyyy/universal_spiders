@@ -75,6 +75,7 @@ class DouyinCommentsPipline(object):
                                  favor_num=item['favor_num'], user_id=item['user_id'], user_name=item['user_name'],
                                  user_photo=item['user_photo'], reply_num=0, is_hot=False,
                                  create_time=item['create_time'])
+            return item
 
 
 if __name__ == "__main__":

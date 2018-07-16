@@ -47,6 +47,7 @@ class CommentsApiDouyinSpider(scrapy.Spider):
     def parse(self, response):
         if response.status == 200:
             data = json.loads(str(response.body, encoding='utf-8'))
+            print(str(response.body, encoding='utf-8'))
             if 'status_code' in data.keys() and data['status_code'] == 0:
                 if 'comments' in data.keys() and data['comments']:
                     for i in data['comments']:
