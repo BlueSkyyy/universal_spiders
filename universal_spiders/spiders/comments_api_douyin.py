@@ -32,10 +32,10 @@ class CommentsApiDouyinSpider(scrapy.Spider):
         self.db_client.db_close()
 
     def start_requests(self):
-        # self.db_client.data_query(
-        #     "SELECT video_id FROM video_data  where DATE_FORMAT(insert_time,'%Y%m%d') = '20180716'LIMIT 3")
-        # query_data = self.db_client.cursor.fetchall()
-        query_data = ['6569926925316263176']
+        self.db_client.data_query(
+            "SELECT video_id FROM video_data  where DATE_FORMAT(insert_time,'%Y%m%d') = '20180716'LIMIT 3")
+        query_data = self.db_client.cursor.fetchall()
+        # query_data = ['6569926925316263176']
         for i in query_data:
             meta_dict = {"aweme_id": i}
             yield scrapy.Request(
