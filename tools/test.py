@@ -203,14 +203,14 @@ if __name__ == '__main__':
 
     params = {
         "max_cursor": '0',
-        'aweme_id': '6569926925316263176',
+        'aweme_id': '6572849697512230158',
         "device_platform": "android",
         "count": 20,
-        "iid": 35747076934,
+        "iid": 34797113441,
         "version_code": "166",
         "app_name": "aweme",
         "version_name": "1.6.6",
-        "device_id": 51277347406,
+        "device_id": 53478839423,
         "ac": "wifi",
         "aid": 1128,
         "build_number": 16605

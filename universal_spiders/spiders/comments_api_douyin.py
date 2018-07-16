@@ -35,7 +35,7 @@ class CommentsApiDouyinSpider(scrapy.Spider):
         self.db_client.data_query(
             "SELECT video_id FROM video_data  where DATE_FORMAT(insert_time,'%Y%m%d') = '20180716'")
         query_data = self.db_client.cursor.fetchall()
-        # query_data = ['6569926925316263176']
+        # query_data = ['6572849697512230158']
         for i in query_data:
             meta_dict = {"aweme_id": str(i[0])}
             yield scrapy.Request(
@@ -53,10 +53,7 @@ class CommentsApiDouyinSpider(scrapy.Spider):
                     for i in data['comments']:
                         item = DouyinCommentsItem()
                         item['source'] = 1
-                        if 'aweme_id' in i.keys() and i['aweme_id']:
-                            item['vid'] = i['aweme_id']
-                        else:
-                            item['vid'] = ''
+                        item['vid'] = response.meta['aweme_id']
                         if 'cid' in i.keys() and i['cid']:
                             item['cid'] = i['cid']
                         else:
