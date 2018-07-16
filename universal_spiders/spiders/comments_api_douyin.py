@@ -11,7 +11,7 @@ import json
 
 class CommentsApiDouyinSpider(scrapy.Spider):
     name = 'comments_api_douyin'
-    allowed_domains = ['aweme.snssdk.com']
+    allowed_domains = ['aweme.snssdk.com', 'api.amemv.com']
 
     # start_urls = ['http://aweme.snssdk.com/']
 

@@ -203,7 +203,7 @@ if __name__ == '__main__':
 
     params = {
         "max_cursor": '0',
-        'aweme_id': '6572849697512230158',
+        'aweme_id': '6569926925316263176',
         "device_platform": "android",
         "count": 20,
         "iid": 34797113441,
