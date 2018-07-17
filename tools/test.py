@@ -202,10 +202,10 @@ if __name__ == '__main__':
                  {"iid": 1, "device_id": 1}]
 
     params = {
-        "max_cursor": '0',
+        "cursor": 0,
         'aweme_id': '6569926925316263176',
         "device_platform": "android",
-        "count": 20,
+        "count": 50,
         "iid": 34797113441,
         "version_code": "166",
         "app_name": "aweme",
@@ -213,7 +213,8 @@ if __name__ == '__main__':
         "device_id": 53478839423,
         "ac": "wifi",
         "aid": 1128,
-        "build_number": 16605
+        "build_number": 16605,
+        "comment_style": 2
     }
     a = DouyinSigHelper.rewrite_params(params, round(time.time()), round(time.time() * 1000))
     url = "https://aweme.snssdk.com/aweme/v1/comment/list/?" + parse.urlencode(a)
@@ -224,7 +225,7 @@ if __name__ == '__main__':
         # "Host": "api.amemv.com",
         # "Connection": "keep-alive",
         # "Accept-Encoding": "gzip",
-        "User-Agent": "okhttp/3.7.0.6",
+        "User-Agent": "okhttp/3.8.1",
     }
 
     search_header = {
@@ -236,7 +237,7 @@ if __name__ == '__main__':
     }
 
     s = requests.session()
-    b = s.get(url=url, headers=search_header)
+    b = s.get(url=url, headers=header)
     print(b.text)
     # import random
     # a = [1, 2, 3]

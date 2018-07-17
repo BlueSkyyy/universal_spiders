@@ -13,10 +13,10 @@ class AuthorApiDouyinSpider(scrapy.Spider):
     # start_urls = ['http://api.amemv.com/']
 
     default_header = {
-        "Host": "api.amemv.com",
-        "Connection": "keep-alive",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "okhttp/3.7.0.6"
+        # "Host": "api.amemv.com",
+        # "Connection": "keep-alive",
+        # "Accept-Encoding": "gzip",
+        "User-Agent": "okhttp/3.8.1"
     }
     search_header = {
         "Host": "aweme.snssdk.com",

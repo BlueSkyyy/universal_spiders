@@ -16,11 +16,11 @@ class CommentsApiDouyinSpider(scrapy.Spider):
     # start_urls = ['http://aweme.snssdk.com/']
 
     dedault_header = {
-        "Host": "aweme.snssdk.com",
-        "Connection": "keep-alive",
-        "Accept-Encoding": "gzip",
-        "X-SS-REQ-TICKET": str(round(time.time() * 1000)),
-        "User-Agent": "com.ss.android.ugc.aweme/190 (Linux; U; Android 7.0; zh_CN_#Hans; BLN-AL40; Build/HONORBLN-AL40; Cronet/58.0.2991.0)"
+        # "Host": "aweme.snssdk.com",
+        # "Connection": "keep-alive",
+        # "Accept-Encoding": "gzip",
+        # "X-SS-REQ-TICKET": str(round(time.time() * 1000)),
+        "User-Agent": "okhttp/3.8.1"
     }
 
     def __init__(self):
@@ -40,7 +40,7 @@ class CommentsApiDouyinSpider(scrapy.Spider):
             meta_dict = {"aweme_id": str(i[0])}
             yield scrapy.Request(
                 url='https://aweme.snssdk.com/aweme/v1/comment/list/?' + DouyinUserAndParamsHelper.update_params({
-                    "aweme_id": str(i[0]), "cursor": 0, "count": 20
+                    "aweme_id": str(i[0]), "cursor": 0, "count": 50, "comment_style": 2
                 }), dont_filter=True, method='GET', headers=CommentsApiDouyinSpider.dedault_header,
                 meta=meta_dict, callback=self.parse)
 
@@ -86,14 +86,14 @@ class CommentsApiDouyinSpider(scrapy.Spider):
                         else:
                             item['create_time'] = round(time.time())
                         yield item
-                if 'has_more' in data.keys() and int(data['has_more']) == 1:
-                    print('HAS_MORE_COMMENTS')
-                    yield scrapy.Request(
-                        url='https://aweme.snssdk.com/aweme/v1/comment/list/?' + DouyinUserAndParamsHelper.update_params(
-                            {
-                                "aweme_id": response.meta["aweme_id"], "cursor": int(data["cursor"]), "count": 20
-                            }), dont_filter=True, method='GET', headers=CommentsApiDouyinSpider.dedault_header,
-                        meta=response.meta, callback=self.parse)
+                # if 'has_more' in data.keys() and int(data['has_more']) == 1:
+                #     print('HAS_MORE_COMMENTS')
+                #     yield scrapy.Request(
+                #         url='https://aweme.snssdk.com/aweme/v1/comment/list/?' + DouyinUserAndParamsHelper.update_params(
+                #             {
+                #                 "aweme_id": response.meta["aweme_id"], "cursor": int(data["cursor"]), "count": 20
+                #             }), dont_filter=True, method='GET', headers=CommentsApiDouyinSpider.dedault_header,
+                #         meta=response.meta, callback=self.parse)
         else:
             from datetime import datetime
             with open(str(datetime.now().date().strftime('%Y%m%d')) + '_douyin_comment_parse!200.txt',
