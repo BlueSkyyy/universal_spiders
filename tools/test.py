@@ -202,10 +202,11 @@ if __name__ == '__main__':
                  {"iid": 1, "device_id": 1}]
 
     params = {
-        "cursor": 0,
-        'aweme_id': '6569926925316263176',
+        #"cursor": 0,
+        #'aweme_id': '6569926925316263176',
+        "keyword": "刺激战场",
         "device_platform": "android",
-        "count": 50,
+        "count": 10,
         "iid": 34797113441,
         "version_code": "166",
         "app_name": "aweme",
@@ -217,7 +218,7 @@ if __name__ == '__main__':
         "comment_style": 2
     }
     a = DouyinSigHelper.rewrite_params(params, round(time.time()), round(time.time() * 1000))
-    url = "https://aweme.snssdk.com/aweme/v1/comment/list/?" + parse.urlencode(a)
+    url = "https://aweme.snssdk.com/aweme/v1/general/search/?" + parse.urlencode(a)
     print(url)
     import requests
 

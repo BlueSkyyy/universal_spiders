@@ -22,36 +22,43 @@ class UniversalSpidersPipeline(object):
         self.client.session_close()
 
     def process_item(self, item, spider):
-        time.sleep(0.1)
-        if int(item['video_duration']) == 0 or item['video_url'] is None:
-            pass
-        else:
-            self.client.rpc_send(source=item['source'], vid=item['vid'], media_name=item['media_name'],
-                                 media_id=item['media_id'], video_title=item['video_title'],
-                                 play_count=item['play_count'],
-                                 video_duration=item['video_duration'], share_url=item['share_url'], source_type='',
-                                 create_time=item['create_time'], channel_id='', question_type='', meta_data='',
-                                 video_cover=item['video_cover'], video_width=item['video_width'],
-                                 video_height=item['video_height'], praise_count=item['praise_count'],
-                                 fav_count=item['fav_count'], share_count=item['share_count'],
-                                 comment_count=item['comment_count'], video_url=item['video_url'], topic=item['topic'],
-                                 parse_type=item['parse_type'])
+        if spider.name == 'author_api_douyin':
+            time.sleep(0.1)
+            if int(item['video_duration']) == 0 or item['video_url'] is None:
+                pass
+            else:
+                self.client.rpc_send(source=item['source'], vid=item['vid'], media_name=item['media_name'],
+                                     media_id=item['media_id'], video_title=item['video_title'],
+                                     play_count=item['play_count'],
+                                     video_duration=item['video_duration'], share_url=item['share_url'], source_type='',
+                                     create_time=item['create_time'], channel_id='', question_type='', meta_data='',
+                                     video_cover=item['video_cover'], video_width=item['video_width'],
+                                     video_height=item['video_height'], praise_count=item['praise_count'],
+                                     fav_count=item['fav_count'], share_count=item['share_count'],
+                                     comment_count=item['comment_count'], video_url=item['video_url'],
+                                     topic=item['topic'],
+                                     parse_type=item['parse_type'])
 
-            return item
+                return item
+        else:
+            pass
 
 
 class WriteAwemIdToFile(object):
     def process_item(self, item, spider):
-        if int(item['video_duration']) == 0 or item['video_url'] is None:
-            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'miss_duration_or_url_awemeid.txt', 'a',
-                      encoding='utf-8')as file:
-                file.write(item['vid'] + '\n')
-            return item
+        if spider.name == 'author_api_douyin':
+            if int(item['video_duration']) == 0 or item['video_url'] is None:
+                with open(str(datetime.now().date().strftime('%Y%m%d')) + 'miss_duration_or_url_awemeid.txt', 'a',
+                          encoding='utf-8')as file:
+                    file.write(item['vid'] + '\n')
+                return item
+            else:
+                with open(str(datetime.now().date().strftime('%Y%m%d')) + 'succeed_awemeid.txt', 'a',
+                          encoding='utf-8')as file:
+                    file.write(item['vid'] + '\n')
+                return item
         else:
-            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'succeed_awemeid.txt', 'a',
-                      encoding='utf-8')as file:
-                file.write(item['vid'] + '\n')
-            return item
+            pass
 
 
 # *********************************************************************************************************************
@@ -67,15 +74,18 @@ class DouyinCommentsPipline(object):
         self.client.douyin_com_session_close()
 
     def process_item(self, item, spider):
-        time.sleep(0.1)
-        if item['vid'] is None or item['content'] is None or item['cid'] is None or item['user_id'] is None:
-            pass
+        if spider.name == 'comments_api_douyin':
+            time.sleep(0.1)
+            if item['vid'] is None or item['content'] is None or item['cid'] is None or item['user_id'] is None:
+                pass
+            else:
+                self.client.rpc_send(source=item['source'], vid=item['vid'], cid=item['cid'], content=item['content'],
+                                     favor_num=item['favor_num'], user_id=item['user_id'], user_name=item['user_name'],
+                                     user_photo=item['user_photo'], reply_num=0, is_hot=False,
+                                     create_time=item['create_time'])
+                return item
         else:
-            self.client.rpc_send(source=item['source'], vid=item['vid'], cid=item['cid'], content=item['content'],
-                                 favor_num=item['favor_num'], user_id=item['user_id'], user_name=item['user_name'],
-                                 user_photo=item['user_photo'], reply_num=0, is_hot=False,
-                                 create_time=item['create_time'])
-            return item
+            pass
 
 
 if __name__ == "__main__":

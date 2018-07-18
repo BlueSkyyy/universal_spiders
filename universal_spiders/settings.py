@@ -64,8 +64,8 @@ COOKIES_ENABLED = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # 'universal_spiders.pipelines.UniversalSpidersPipeline': 300,
-    # 'universal_spiders.pipelines.WriteAwemIdToFile': 500,
+    'universal_spiders.pipelines.UniversalSpidersPipeline': 300,
+    'universal_spiders.pipelines.WriteAwemIdToFile': 500,
     'universal_spiders.pipelines.DouyinCommentsPipline': 400,
 }
 

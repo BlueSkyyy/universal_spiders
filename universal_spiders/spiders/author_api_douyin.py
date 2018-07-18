@@ -18,13 +18,13 @@ class AuthorApiDouyinSpider(scrapy.Spider):
         # "Accept-Encoding": "gzip",
         "User-Agent": "okhttp/3.8.1"
     }
-    search_header = {
-        "Host": "aweme.snssdk.com",
-        "Connection": "keep-alive",
-        "Accept-Encoding": "gzip",
-        "X-SS-REQ-TICKET": str(round(time.time() * 1000)),
-        "User-Agent": "com.ss.android.ugc.aweme/190 (Linux; U; Android 7.0; zh_CN_#Hans; BLN-AL40; Build/HONORBLN-AL40; Cronet/58.0.2991.0)"
-    }
+    # search_header = {
+    #     "Host": "aweme.snssdk.com",
+    #     "Connection": "keep-alive",
+    #     "Accept-Encoding": "gzip",
+    #     "X-SS-REQ-TICKET": str(round(time.time() * 1000)),
+    #     "User-Agent": "com.ss.android.ugc.aweme/190 (Linux; U; Android 7.0; zh_CN_#Hans; BLN-AL40; Build/HONORBLN-AL40; Cronet/58.0.2991.0)"
+    # }
     try_count = 0
 
     def start_requests(self):
@@ -52,7 +52,7 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                 meta_dict = {"topic": k, "keyword": i}
                 yield scrapy.Request(
                     url='https://aweme.snssdk.com/aweme/v1/general/search/?' + DouyinUserAndParamsHelper.update_params(
-                        {"keyword": i, "count": 10}), dont_filter=True, headers=AuthorApiDouyinSpider.search_header,
+                        {"keyword": i, "count": 10}), dont_filter=True, headers=AuthorApiDouyinSpider.default_header,
                     method='GET',
                     meta=meta_dict, callback=self.parse)
 
@@ -85,7 +85,7 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                 AuthorApiDouyinSpider.try_count += 1
                 if AuthorApiDouyinSpider.try_count > 10:
                     from datetime import datetime
-                    with open(str(datetime.now().date().strftime('%Y%m%d')) + 'search_err.txt', 'a',
+                    with open(str(datetime.now().date().strftime('%Y%m%d')) + 'userid_search_err.txt', 'a',
                               encoding='utf-8')as file:
                         file.write(
                             'keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
@@ -93,12 +93,12 @@ class AuthorApiDouyinSpider(scrapy.Spider):
                     yield scrapy.Request(
                         url='https://aweme.snssdk.com/aweme/v1/general/search/?' + DouyinUserAndParamsHelper.update_params(
                             {"keyword": response.meta['keyword'], "count": 10}), dont_filter=True,
-                        headers=AuthorApiDouyinSpider.search_header,
+                        headers=AuthorApiDouyinSpider.default_header,
                         method='GET',
                         meta=response.meta, callback=self.parse)
         else:
             from datetime import datetime
-            with open(str(datetime.now().date().strftime('%Y%m%d')) + 'douyin_parse_!200_err.txt', 'a',
+            with open(str(datetime.now().date().strftime('%Y%m%d')) + '_userid_douyin_parse_!200_err.txt', 'a',
                       encoding='utf-8')as file:
                 file.write('keyword:' + str(response.meta['keyword']) + ',topic:' + response.meta['topic'] + '\n')
 

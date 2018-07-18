@@ -9,4 +9,4 @@ from scrapy.cmdline import execute
 import sys, os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-execute(['scrapy', 'crawl', 'comments_api_douyin'])
+execute(['scrapy', 'crawl', 'challage_api_douyin'])
